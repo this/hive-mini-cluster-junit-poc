@@ -1,0 +1,34 @@
+plugins {
+    id 'java'
+    id 'application'
+}
+
+repositories {
+    mavenCentral()
+    maven {
+        url 'https://repo.hortonworks.com/content/groups/public/'
+    }
+    maven {
+        url 'http://conjars.org/repo'
+    }
+
+}
+
+ext {
+    hadoop_mini_clusters_version = '0.1.16'
+}
+
+dependencies {
+    testImplementation 'junit:junit:4.12'
+    testImplementation group: 'com.github.sakserv', name: 'hadoop-mini-clusters-common', version: project.ext.hadoop_mini_clusters_version
+    testImplementation group: 'com.github.sakserv', name: 'hadoop-mini-clusters-hiveserver2', version: project.ext.hadoop_mini_clusters_version
+    testImplementation group: 'com.github.sakserv', name: 'hadoop-mini-clusters-hivemetastore', version: project.ext.hadoop_mini_clusters_version
+    testImplementation group: 'com.github.sakserv', name: 'hadoop-mini-clusters-zookeeper', version: project.ext.hadoop_mini_clusters_version
+    testImplementation group: 'com.github.sakserv', name: 'property-parser', version: '0.0.2'
+
+}
+
+application {
+    // Define the main class for the application.
+    mainClassName = 'ai.h2o.example.App'
+}

@@ -1,16 +1,11 @@
-# Compiled class file
-*.class
+# Ignore Gradle project-specific cache directory
+.gradle
 
-# Log file
-*.log
+# Ignore Gradle build output directory
+build
 
-# BlueJ files
-*.ctxt
+.idea
 
-# Mobile Tools for Java (J2ME)
-.mtj.tmp/
-
-# Package Files #
 *.jar
 *.war
 *.nar
