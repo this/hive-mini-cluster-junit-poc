@@ -61,6 +61,6 @@ public class AppTest {
     @Test
     public void testHiveConnector() {
         App app = new App();
-        assertEquals("{\"success\":true}", app.runConnector());
+        assertEquals("{\"success\":true}", app.runConnector("NOAUTH"));
     }
 }

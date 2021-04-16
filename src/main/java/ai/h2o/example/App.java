@@ -14,20 +14,20 @@ public class App {
         return "Hello world.";
     }
 
-    public String runConnector() {
+    public String runConnector(String authType) {
         Path workingDir = Paths.get(".").toAbsolutePath();
         try {
             String[] commands = {
                     "java",
                     "-Ddai.connectors.log.dir=" + workingDir.resolve("build/logs"),
                     "-cp",
-                    "h2oai-dai-connectors.jar:conf",
+                    "h2oai-dai-connectors.jar:" + workingDir.resolve("conf").resolve(authType.toLowerCase()),
                     "ai.h2o.dai.connectors.HiveConnectorCli",
                     "--user=sajith",
                     "--appUser=",
                     "--keyTabPath=",
                     "--dst=" + workingDir.resolve("build/results_" + System.currentTimeMillis()),
-                    "--authType=NOAUTH",
+                    "--authType=" + authType,
                     "--query=select 1",
                     "--coreSiteXmlPath=conf",
                     "--command=query"
@@ -53,7 +53,7 @@ public class App {
 
     public static void main(String[] args) {
         System.out.println("===================================");
-        System.out.println(new App().runConnector());
+        System.out.println(new App().runConnector("NOAUTH"));
         System.out.println("===================================");
     }
 }
