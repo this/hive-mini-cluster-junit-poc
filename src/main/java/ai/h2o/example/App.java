@@ -33,7 +33,7 @@ public class App {
                     "--command=query"
             };
             Process p = new ProcessBuilder(commands)
-                    .directory(Paths.get("").toAbsolutePath().toFile())
+                    .directory(workingDir.toFile())
                     .redirectErrorStream(true)
                     .start();
             p.waitFor();
