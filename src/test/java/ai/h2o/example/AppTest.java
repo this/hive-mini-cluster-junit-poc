@@ -18,9 +18,9 @@ import java.nio.file.Path;
 import static org.junit.Assert.assertEquals;
 
 public class AppTest {
-    private static ZookeeperLocalCluster zookeeperLocalCluster;
-    private static HiveLocalMetaStore hiveLocalMetaStore;
-    private static HiveLocalServer2 hiveLocalServer2;
+    private ZookeeperLocalCluster zookeeperLocalCluster;
+    private HiveLocalMetaStore hiveLocalMetaStore;
+    private HiveLocalServer2 hiveLocalServer2;
 
     @Rule
     public TemporaryFolder tmpDir = new TemporaryFolder();
