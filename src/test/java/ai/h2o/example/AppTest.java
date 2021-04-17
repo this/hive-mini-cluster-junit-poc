@@ -5,7 +5,6 @@ package ai.h2o.example;
 
 import com.github.sakserv.minicluster.impl.HiveLocalMetaStore;
 import com.github.sakserv.minicluster.impl.HiveLocalServer2;
-import com.github.sakserv.minicluster.impl.ZookeeperLocalCluster;
 import org.apache.hadoop.hive.conf.HiveConf;
 import org.junit.After;
 import org.junit.Before;
@@ -18,7 +17,6 @@ import java.nio.file.Path;
 import static org.junit.Assert.assertEquals;
 
 public class AppTest {
-    private ZookeeperLocalCluster zookeeperLocalCluster;
     private HiveLocalMetaStore hiveLocalMetaStore;
     private HiveLocalServer2 hiveLocalServer2;
 
@@ -27,14 +25,6 @@ public class AppTest {
 
     @Before
     public void setUp() throws Exception {
-        final Path zookeeperDir = tmpDir.newFolder("zk-mini-cluster").toPath();
-        zookeeperLocalCluster = new ZookeeperLocalCluster.Builder()
-                .setPort(22010)
-                .setTempDir(zookeeperDir.toString())
-                .setZookeeperConnectionString("127.0.0.1:22010")
-                .build();
-        zookeeperLocalCluster.start();
-
         final Path hiveDir = tmpDir.newFolder("hive-mini-cluster").toPath();
         final String hiveMetastoreDerbyDbDir = hiveDir.resolve("metastore_db").toString();
         final String hiveScratchDir = hiveDir.resolve("hdfs-scratchdir").toString();
@@ -56,7 +46,7 @@ public class AppTest {
                 .setHiveMetastoreDerbyDbDir(hiveMetastoreDerbyDbDir)
                 .setHiveScratchDir(hiveScratchDir)
                 .setHiveWarehouseDir(hiveWarehouseDir)
-                .setZookeeperConnectionString("127.0.0.1:22010")
+                .setZookeeperConnectionString("")
                 .setHiveConf(new HiveConf())
                 .build();
         hiveLocalServer2.start();
@@ -66,7 +56,6 @@ public class AppTest {
     public void tearDown() throws Exception {
         hiveLocalServer2.stop();
         hiveLocalMetaStore.stop();
-        zookeeperLocalCluster.stop();
     }
 
     @Test

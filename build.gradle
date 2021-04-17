@@ -23,7 +23,6 @@ dependencies {
     testImplementation group: 'com.github.sakserv', name: 'hadoop-mini-clusters-common', version: project.ext.hadoop_mini_clusters_version
     testImplementation group: 'com.github.sakserv', name: 'hadoop-mini-clusters-hiveserver2', version: project.ext.hadoop_mini_clusters_version
     testImplementation group: 'com.github.sakserv', name: 'hadoop-mini-clusters-hivemetastore', version: project.ext.hadoop_mini_clusters_version
-    testImplementation group: 'com.github.sakserv', name: 'hadoop-mini-clusters-zookeeper', version: project.ext.hadoop_mini_clusters_version
 }
 
 application {
