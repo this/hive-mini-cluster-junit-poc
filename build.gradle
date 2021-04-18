@@ -21,8 +21,12 @@ ext {
 dependencies {
     testImplementation 'junit:junit:4.12'
     testImplementation group: 'com.github.sakserv', name: 'hadoop-mini-clusters-common', version: project.ext.hadoop_mini_clusters_version
-    testImplementation group: 'com.github.sakserv', name: 'hadoop-mini-clusters-hiveserver2', version: project.ext.hadoop_mini_clusters_version
+    testImplementation group: 'com.github.sakserv', name: 'hadoop-mini-clusters-hdfs', version: project.ext.hadoop_mini_clusters_version
+    testImplementation group: 'com.github.sakserv', name: 'hadoop-mini-clusters-mapreduce', version: project.ext.hadoop_mini_clusters_version
+    testImplementation group: 'com.github.sakserv', name: 'hadoop-mini-clusters-zookeeper', version: project.ext.hadoop_mini_clusters_version
     testImplementation group: 'com.github.sakserv', name: 'hadoop-mini-clusters-hivemetastore', version: project.ext.hadoop_mini_clusters_version
+    testImplementation group: 'com.github.sakserv', name: 'hadoop-mini-clusters-hiveserver2', version: project.ext.hadoop_mini_clusters_version
+    testImplementation group: 'org.apache.hive', name: 'hive-jdbc', version: '1.2.1'
 }
 
 application {

@@ -2,55 +2,14 @@
 <?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
 <configuration>
     <property>
-        <name>hive.in.test</name>
-        <value>true</value>
-        <description>internal usage only, true in test mode</description>
-    </property>
-    <property>
-        <name>hive.metastore.uris</name>
-        <value>thrift://localhost:9083</value>
-        <description>Thrift URI for the remote metastore. Used by metastore client to connect to remote metastore.
-        </description>
-    </property>
-    <property>
-        <name>hive.exec.scratchdir</name>
-        <value>/tmp/hive-mini-cluster/hdfs-scratchdir</value>
-        <description>HDFS root scratch dir for Hive jobs which gets created with write all (733) permission. For each
-            connecting user, an HDFS scratch dir: ${hive.exec.scratchdir}/&lt;username&gt; is created, with
-            ${hive.scratch.dir.permission}.
-        </description>
-    </property>
-    <property>
-        <name>javax.jdo.option.ConnectionURL</name>
-        <value>jdbc:derby:;databaseName=/tmp/hive-mini-cluster/metastore_db;create=true</value>
-        <description>the URL of the metastore database</description>
-    </property>
-    <property>
-        <name>hive.metastore.warehouse.dir</name>
-        <value>/tmp/hive-mini-cluster/warehouse</value>
-        <description>location of default database for the warehouse</description>
-    </property>
-    <property>
         <name>hive.server2.thrift.bind.host</name>
         <value>localhost</value>
         <description>Bind host on which to run the HiveServer2 Thrift service.</description>
     </property>
     <property>
-        <name>hive.server2.thrift.port</name>
-        <value>10000</value>
-        <description>Port number of HiveServer2 Thrift interface when hive.server2.transport.mode is 'binary'.</description>
-    </property>
-    <property>
-        <name>hive.zookeeper.quorum</name>
-        <value>127.0.0.1:22010</value>
-        <description>
-            List of ZooKeeper servers to talk to. This is needed for:
-            1. Read/write locks - when hive.lock.manager is set to
-            org.apache.hadoop.hive.ql.lockmgr.zookeeper.ZooKeeperHiveLockManager,
-            2. When HiveServer2 supports service discovery via Zookeeper.
-            3. For delegation token storage if zookeeper store is used, if
-            hive.cluster.delegation.token.store.zookeeper.connectString is not set
-            4. LLAP daemon registry service
+        <name>hive.metastore.uris</name>
+        <value>thrift://localhost:9083</value>
+        <description>Thrift URI for the remote metastore. Used by metastore client to connect to remote metastore.
         </description>
     </property>
 </configuration>

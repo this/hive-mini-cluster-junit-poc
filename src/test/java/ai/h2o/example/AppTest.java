@@ -3,8 +3,12 @@
  */
 package ai.h2o.example;
 
+import com.github.sakserv.minicluster.impl.HdfsLocalCluster;
 import com.github.sakserv.minicluster.impl.HiveLocalMetaStore;
 import com.github.sakserv.minicluster.impl.HiveLocalServer2;
+import com.github.sakserv.minicluster.impl.MRLocalCluster;
+import com.github.sakserv.minicluster.impl.ZookeeperLocalCluster;
+import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hive.conf.HiveConf;
 import org.junit.After;
 import org.junit.Before;
@@ -13,54 +17,131 @@ import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 
 import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.sql.Connection;
+import java.sql.DriverManager;
 
 import static org.junit.Assert.assertEquals;
 
 public class AppTest {
+    private HdfsLocalCluster hdfsLocalCluster;
+    private MRLocalCluster mrLocalCluster;
+    private ZookeeperLocalCluster zookeeperLocalCluster;
     private HiveLocalMetaStore hiveLocalMetaStore;
     private HiveLocalServer2 hiveLocalServer2;
 
     @Rule
-    public TemporaryFolder tmpDir = new TemporaryFolder();
+    public TemporaryFolder tmpDir = new TemporaryFolder(Paths.get("", "build").toFile());
 
     @Before
     public void setUp() throws Exception {
+        final Configuration hdfsConfig = new Configuration();
+        hdfsConfig.setInt("dfs.replication", 1);
+        hdfsConfig.setInt("dfs.namenode.rpc-address", 9000);
+        hdfsConfig.setInt("dfs.namenode.http-address", 50070);
+        hdfsLocalCluster = new HdfsLocalCluster.Builder()
+                .setHdfsNamenodePort(hdfsConfig.getInt("dfs.namenode.rpc-address", -1))
+                .setHdfsNamenodeHttpPort(hdfsConfig.getInt("dfs.namenode.http-address", -1))
+                .setHdfsTempDir(tmpDir.newFolder("hdfs-mini-cluster").getPath())
+                .setHdfsNumDatanodes(1)
+                .setHdfsFormat(true)
+                .setHdfsEnablePermissions(true)
+                .setHdfsConfig(hdfsConfig)
+                .build();
+        hdfsLocalCluster.start();
+        hdfsConfig.set("yarn.resourcemanager.hostname", "127.0.0.1");
+        mrLocalCluster = new MRLocalCluster.Builder()
+                .setNumNodeManagers(1)
+                .setJobHistoryAddress(hdfsConfig.get("mapreduce.jobhistory.address"))
+                .setResourceManagerHostname(hdfsConfig.get("yarn.resourcemanager.hostname"))
+                .setResourceManagerAddress(hdfsConfig.get("yarn.resourcemanager.address"))
+                .setResourceManagerSchedulerAddress(hdfsConfig.get("yarn.resourcemanager.scheduler.address"))
+                .setResourceManagerResourceTrackerAddress(hdfsConfig.get("yarn.resourcemanager.resource-tracker.address"))
+                .setResourceManagerWebappAddress(hdfsConfig.get("yarn.resourcemanager.webapp.address"))
+                .setHdfsDefaultFs(hdfsConfig.get("fs.defaultFS"))
+                .setUseInJvmContainerExecutor(false)
+                .setConfig(hdfsConfig)
+                .build();
+        mrLocalCluster.start();
+
+        zookeeperLocalCluster = new ZookeeperLocalCluster.Builder()
+                .setPort(22010)
+                .setTempDir(tmpDir.newFolder("zk-mini-cluster").toPath().toString())
+                .setZookeeperConnectionString("127.0.0.1:22010")
+                .build();
+        zookeeperLocalCluster.start();
         final Path hiveDir = tmpDir.newFolder("hive-mini-cluster").toPath();
         final String hiveMetastoreDerbyDbDir = hiveDir.resolve("metastore_db").toString();
         final String hiveScratchDir = hiveDir.resolve("hdfs-scratchdir").toString();
         final String hiveWarehouseDir = hiveDir.resolve("warehouse").toString();
+        final HiveConf hiveConf = new HiveConf();
+        hiveConf.set(HiveConf.ConfVars.HIVE_SERVER2_THRIFT_BIND_HOST.varname, "localhost");
         hiveLocalMetaStore = new HiveLocalMetaStore.Builder()
                 .setHiveMetastoreHostname("localhost")
-                .setHiveMetastorePort(9083)
+                .setHiveMetastorePort(hiveConf.getInt(HiveConf.ConfVars.METASTORE_SERVER_PORT.varname, -1))
                 .setHiveMetastoreDerbyDbDir(hiveMetastoreDerbyDbDir)
                 .setHiveScratchDir(hiveScratchDir)
                 .setHiveWarehouseDir(hiveWarehouseDir)
-                .setHiveConf(new HiveConf())
+                .setHiveConf(hiveConf)
                 .build();
         hiveLocalMetaStore.start();
         hiveLocalServer2 = new HiveLocalServer2.Builder()
-                .setHiveServer2Hostname("localhost")
-                .setHiveServer2Port(10000)
-                .setHiveMetastoreHostname("localhost")
-                .setHiveMetastorePort(9083)
+                .setHiveServer2Hostname(hiveConf.get(HiveConf.ConfVars.HIVE_SERVER2_THRIFT_BIND_HOST.varname))
+                .setHiveServer2Port(hiveConf.getInt(HiveConf.ConfVars.HIVE_SERVER2_THRIFT_PORT.varname, -1))
+                .setHiveMetastoreHostname(hiveLocalMetaStore.getHiveMetastoreHostname())
+                .setHiveMetastorePort(hiveLocalMetaStore.getHiveMetastorePort())
                 .setHiveMetastoreDerbyDbDir(hiveMetastoreDerbyDbDir)
                 .setHiveScratchDir(hiveScratchDir)
                 .setHiveWarehouseDir(hiveWarehouseDir)
-                .setZookeeperConnectionString("")
-                .setHiveConf(new HiveConf())
+                .setZookeeperConnectionString(zookeeperLocalCluster.getZookeeperConnectionString())
+                .setHiveConf(hiveConf)
                 .build();
         hiveLocalServer2.start();
+
+        Class.forName("org.apache.hive.jdbc.HiveDriver");
+        String url = String.format("jdbc:hive2://%s:%d/default", hiveLocalServer2.getHiveServer2Hostname(), hiveLocalServer2.getHiveServer2Port());
+        Connection con = DriverManager.getConnection(url,
+                hiveConf.get(HiveConf.ConfVars.METASTORE_CONNECTION_USER_NAME.defaultStrVal),
+                hiveConf.get(HiveConf.ConfVars.METASTOREPWD.defaultStrVal));
+        con.createStatement().execute("CREATE EXTERNAL TABLE IF NOT EXISTS grades(" +
+                "last_name VARCHAR(50), " +
+                "first_name VARCHAR(50), " +
+                "ssn VARCHAR(11), " +
+                "test1 FLOAT, " +
+                "test2 FLOAT, " +
+                "test3 FLOAT, " +
+                "test4 FLOAT, " +
+                "final FLOAT, " +
+                "grade VARCHAR(2)" +
+                ") ROW FORMAT DELIMITED FIELDS TERMINATED BY ',' tblproperties('skip.header.line.count'='1')");
+        con.createStatement().execute("LOAD DATA LOCAL INPATH '" +
+                Paths.get("src/test/resources/grades.csv").toAbsolutePath() +
+                "' OVERWRITE INTO TABLE grades");
+        con.close();
     }
 
     @After
     public void tearDown() throws Exception {
-        hiveLocalServer2.stop();
-        hiveLocalMetaStore.stop();
+        if (hiveLocalServer2 != null) {
+            hiveLocalServer2.stop();
+        }
+        if (hiveLocalMetaStore != null) {
+            hiveLocalMetaStore.stop();
+        }
+        if (zookeeperLocalCluster != null) {
+            zookeeperLocalCluster.stop();
+        }
+        if (mrLocalCluster != null) {
+            mrLocalCluster.stop();
+        }
+        if (hdfsLocalCluster != null) {
+            hdfsLocalCluster.stop();
+        }
     }
 
     @Test
     public void testHiveConnector() {
         App app = new App();
-        assertEquals("{\"success\":true}", app.runConnector("NOAUTH"));
+        assertEquals("{\"success\":true}", app.runConnector("NOAUTH", "SELECT count(*) FROM grades"));
     }
 }

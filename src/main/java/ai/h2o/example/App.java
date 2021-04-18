@@ -14,7 +14,7 @@ public class App {
         return "Hello world.";
     }
 
-    public String runConnector(String authType) {
+    public String runConnector(String authType, String query) {
         Path workingDir = Paths.get(".").toAbsolutePath();
         try {
             String[] commands = {
@@ -28,7 +28,7 @@ public class App {
                     "--keyTabPath=",
                     "--dst=" + workingDir.resolve("build/results_" + System.currentTimeMillis()),
                     "--authType=" + authType,
-                    "--query=select 1",
+                    "--query=" + query,
                     "--coreSiteXmlPath=conf",
                     "--command=query"
             };
@@ -53,7 +53,7 @@ public class App {
 
     public static void main(String[] args) {
         System.out.println("===================================");
-        System.out.println(new App().runConnector("NOAUTH"));
+        System.out.println(new App().runConnector("NOAUTH", "select databases"));
         System.out.println("===================================");
     }
 }
