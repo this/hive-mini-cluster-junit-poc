@@ -115,7 +115,7 @@ public class AppTest {
                 "grade VARCHAR(2)" +
                 ") ROW FORMAT DELIMITED FIELDS TERMINATED BY ',' tblproperties('skip.header.line.count'='1')");
         con.createStatement().execute("LOAD DATA LOCAL INPATH '" +
-                Paths.get("src/test/resources/grades.csv").toAbsolutePath() +
+                Paths.get("src/test/resources/datasets/grades.csv").toAbsolutePath() +
                 "' OVERWRITE INTO TABLE grades");
         con.close();
     }
