@@ -46,6 +46,7 @@ public class NoAuthTest {
                 .setHdfsConfig(hdfsConfig)
                 .build();
         hdfsLocalCluster.start();
+        System.out.println("############################################################################ HDFS Started");
         hdfsConfig.set("yarn.resourcemanager.hostname", "127.0.0.1");
         mrLocalCluster = new MRLocalCluster.Builder()
                 .setNumNodeManagers(1)
@@ -60,6 +61,7 @@ public class NoAuthTest {
                 .setConfig(hdfsConfig)
                 .build();
         mrLocalCluster.start();
+        System.out.println("####################################################################### MapReduce Started");
 
         zookeeperLocalCluster = new ZookeeperLocalCluster.Builder()
                 .setPort(22010)
@@ -67,6 +69,7 @@ public class NoAuthTest {
                 .setZookeeperConnectionString("127.0.0.1:22010")
                 .build();
         zookeeperLocalCluster.start();
+        System.out.println("############################################################################## ZK Started");
         final Path hiveDir = tmpDir.newFolder("hive-mini-cluster").toPath();
         final String hiveMetastoreDerbyDbDir = hiveDir.resolve("metastore_db").toString();
         final String hiveScratchDir = hiveDir.resolve("hdfs-scratchdir").toString();
@@ -82,6 +85,7 @@ public class NoAuthTest {
                 .setHiveConf(hiveConf)
                 .build();
         hiveLocalMetaStore.start();
+        System.out.println("################################################################## Hive Metastore Started");
         hiveLocalServer2 = new HiveLocalServer2.Builder()
                 .setHiveServer2Hostname(hiveConf.getVar(HiveConf.ConfVars.HIVE_SERVER2_THRIFT_BIND_HOST))
                 .setHiveServer2Port(hiveConf.getIntVar(HiveConf.ConfVars.HIVE_SERVER2_THRIFT_PORT))
@@ -94,6 +98,7 @@ public class NoAuthTest {
                 .setHiveConf(hiveConf)
                 .build();
         hiveLocalServer2.start();
+        System.out.println("#################################################################### Hive Server2 Started");
 
         Class.forName("org.apache.hive.jdbc.HiveDriver");
         final String url = String.format("jdbc:hive2://127.0.0.1:%d/default", hiveLocalServer2.getHiveServer2Port());
@@ -115,6 +120,7 @@ public class NoAuthTest {
                 Paths.get("src/test/resources/datasets/grades.csv").toAbsolutePath() +
                 "' OVERWRITE INTO TABLE grades");
         con.close();
+        System.out.println("############################################################################## Setup done");
     }
 
     @After
