@@ -96,7 +96,7 @@ public class NoAuthTest {
         hiveLocalServer2.start();
 
         Class.forName("org.apache.hive.jdbc.HiveDriver");
-        String url = String.format("jdbc:hive2://%s:%d/default", hiveLocalServer2.getHiveServer2Hostname(), hiveLocalServer2.getHiveServer2Port());
+        final String url = String.format("jdbc:hive2://127.0.0.1:%d/default", hiveLocalServer2.getHiveServer2Port());
         final Connection con = DriverManager.getConnection(url,
                 HiveConf.ConfVars.METASTORE_CONNECTION_USER_NAME.defaultStrVal,
                 HiveConf.ConfVars.METASTOREPWD.defaultStrVal);
