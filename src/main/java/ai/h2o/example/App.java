@@ -16,12 +16,13 @@ public class App {
 
     public String runConnector(String authType, String query) {
         Path workingDir = Paths.get(".").toAbsolutePath();
+        Path confDir = workingDir.resolve("src/test/resources/conf").resolve(authType.toLowerCase());
         try {
             String[] commands = {
                     "java",
                     "-Ddai.connectors.log.dir=" + workingDir.resolve("build/logs"),
                     "-cp",
-                    "h2oai-dai-connectors.jar:" + workingDir.resolve("conf").resolve(authType.toLowerCase()),
+                    "h2oai-dai-connectors.jar:" + confDir,
                     "ai.h2o.dai.connectors.HiveConnectorCli",
                     "--user=sajith",
                     "--appUser=",
@@ -29,7 +30,7 @@ public class App {
                     "--dst=" + workingDir.resolve("build/results_" + System.currentTimeMillis()),
                     "--authType=" + authType,
                     "--query=" + query,
-                    "--coreSiteXmlPath=conf",
+                    "--coreSiteXmlPath=" + confDir,
                     "--command=query"
             };
             Process p = new ProcessBuilder(commands)
