@@ -72,7 +72,7 @@ public class AppTest {
         final String hiveScratchDir = hiveDir.resolve("hdfs-scratchdir").toString();
         final String hiveWarehouseDir = hiveDir.resolve("warehouse").toString();
         final HiveConf hiveConf = new HiveConf();
-        hiveConf.set(HiveConf.ConfVars.HIVE_SERVER2_THRIFT_BIND_HOST.varname, "localhost");
+        hiveConf.setVar(HiveConf.ConfVars.HIVE_SERVER2_THRIFT_BIND_HOST, "localhost");
         hiveLocalMetaStore = new HiveLocalMetaStore.Builder()
                 .setHiveMetastoreHostname("localhost")
                 .setHiveMetastorePort(hiveConf.getInt(HiveConf.ConfVars.METASTORE_SERVER_PORT.varname, -1))
