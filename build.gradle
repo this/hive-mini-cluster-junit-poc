@@ -32,6 +32,11 @@ dependencies {
     testImplementation group: 'org.apache.hive', name: 'hive-jdbc', version: '1.2.1'
 }
 
+test {
+    forkEvery = 1
+    maxParallelForks = 1
+}
+
 application {
     // Define the main class for the application.
     mainClassName = 'ai.h2o.example.ConnectorRunner'
