@@ -97,9 +97,9 @@ public class NoAuthTest {
 
         Class.forName("org.apache.hive.jdbc.HiveDriver");
         String url = String.format("jdbc:hive2://%s:%d/default", hiveLocalServer2.getHiveServer2Hostname(), hiveLocalServer2.getHiveServer2Port());
-        Connection con = DriverManager.getConnection(url,
-                hiveConf.get(HiveConf.ConfVars.METASTORE_CONNECTION_USER_NAME.defaultStrVal),
-                hiveConf.get(HiveConf.ConfVars.METASTOREPWD.defaultStrVal));
+        final Connection con = DriverManager.getConnection(url,
+                HiveConf.ConfVars.METASTORE_CONNECTION_USER_NAME.defaultStrVal,
+                HiveConf.ConfVars.METASTOREPWD.defaultStrVal);
         con.createStatement().execute("CREATE EXTERNAL TABLE IF NOT EXISTS grades(" +
                 "last_name VARCHAR(50), " +
                 "first_name VARCHAR(50), " +
