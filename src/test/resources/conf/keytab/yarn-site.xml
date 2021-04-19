@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<configuration>
+    <property>
+        <name>yarn.resourcemanager.hostname</name>
+        <value>127.0.0.1</value>
+    </property>
+    <property>
+        <name>yarn.nodemanager.aux-services</name>
+        <value>mapreduce_shuffle</value>
+    </property>
+
+    <property>
+        <name>yarn.minicluster.fixed.ports</name>
+        <value>true</value>
+    </property>
+
+    <property>
+        <name>yarn.resourcemanager.principal</name>
+        <value>alice/localhost@KDC.LOCAL</value>
+    </property>
+    <property>
+        <name>yarn.resourcemanager.keytab</name>
+        <value>${KDC_MINI_CLUSTER_BASE_DIR}/alice.keytab</value>
+    </property>
+    <property>
+        <name>yarn.nodemanager.principal</name>
+        <value>alice/localhost@KDC.LOCAL</value>
+    </property>
+    <property>
+        <name>yarn.nodemanager.keytab</name>
+        <value>${KDC_MINI_CLUSTER_BASE_DIR}/alice.keytab</value>
+    </property>
+</configuration>

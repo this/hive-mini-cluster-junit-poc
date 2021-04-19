@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+<configuration>
+    <property>
+        <name>hive.server2.thrift.bind.host</name>
+        <value>localhost</value>
+        <description>Bind host on which to run the HiveServer2 Thrift service.</description>
+    </property>
+    <property>
+        <name>hive.metastore.uris</name>
+        <value>thrift://localhost:9083</value>
+        <description>Thrift URI for the remote metastore. Used by metastore client to connect to remote metastore.</description>
+    </property>
+
+    <property>
+        <name>hive.metastore.sasl.enabled</name>
+        <value>true</value>
+        <description>If true, the metastore thrift interface will be secured with SASL. Clients must authenticate with Kerberos.</description>
+    </property>
+    <property>
+        <name>hive.server2.authentication</name>
+        <value>KERBEROS</value>
+        <description>
+            Expects one of [nosasl, none, ldap, kerberos, pam, custom].
+            Client authentication types.
+            NONE: no authentication check
+            LDAP: LDAP/AD based authentication
+            KERBEROS: Kerberos/GSSAPI authentication
+            CUSTOM: Custom authentication provider
+            (Use with property hive.server2.custom.authentication.class)
+            PAM: Pluggable authentication module
+            NOSASL:  Raw transport
+        </description>
+    </property>
+    <property>
+        <name>hive.server2.authentication.kerberos.principal</name>
+        <value>alice/localhost@KDC.LOCAL</value>
+        <description>Kerberos server principal</description>
+    </property>
+    <property>
+        <name>hive.server2.authentication.kerberos.keytab</name>
+        <value>${KDC_MINI_CLUSTER_BASE_DIR}/alice.keytab</value>
+        <description>Kerberos keytab file for server principal</description>
+    </property>
+    <property>
+        <name>hive.metastore.kerberos.principal</name>
+        <value>alice/localhost@KDC.LOCAL</value>
+        <description>
+            The service principal for the metastore Thrift server.
+            The special string _HOST will be replaced automatically with the correct host name.
+        </description>
+    </property>
+    <property>
+        <name>hive.metastore.kerberos.keytab.file</name>
+        <value>${KDC_MINI_CLUSTER_BASE_DIR}/alice.keytab</value>
+        <description>The path to the Kerberos Keytab file containing the metastore Thrift server's service principal.</description>
+    </property>
+
+    <property>
+        <name>hive.server2.enable.doAs</name>
+        <value>false</value>
+        <description>
+            Setting this property to true will have HiveServer2 execute
+            Hive operations as the user making the calls to it.
+        </description>
+    </property>
+</configuration>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+<configuration>
+    <property>
+        <name>fs.defaultFS</name>
+        <value>hdfs://127.0.0.1:9000</value>
+    </property>
+
+    <property>
+        <name>hadoop.security.authentication</name>
+        <value>kerberos</value>
+    </property>
+    <property>
+        <name>hadoop.security.authorization</name>
+        <value>true</value>
+    </property>
+<!--    <property>-->
+<!--        <name>hadoop.security.auth_to_local</name>-->
+<!--        <value>-->
+<!--            RULE:[1:$0](KDC.LOCAL)s/.*/alice/-->
+<!--            RULE:[2:$0](KDC.LOCAL)s/.*/alice/-->
+<!--        </value>-->
+<!--    </property>-->
+</configuration>

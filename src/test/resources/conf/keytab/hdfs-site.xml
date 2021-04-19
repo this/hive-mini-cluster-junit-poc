@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+<configuration>
+    <property>
+        <name>dfs.replication</name>
+        <value>1</value>
+    </property>
+    <property>
+        <name>dfs.namenode.rpc-address</name>
+        <value>9000</value>
+    </property>
+
+    <property>
+        <name>dfs.namenode.kerberos.principal</name>
+        <value>alice/localhost@KDC.LOCAL</value>
+    </property>
+    <property>
+        <name>dfs.namenode.keytab.file</name>
+        <value>${KDC_MINI_CLUSTER_BASE_DIR}/alice.keytab</value>
+    </property>
+    <property>
+        <name>dfs.secondary.namenode.kerberos.principal</name>
+        <value>alice/localhost@KDC.LOCAL</value>
+    </property>
+    <property>
+        <name>dfs.secondary.namenode.keytab.file</name>
+        <value>${KDC_MINI_CLUSTER_BASE_DIR}/alice.keytab</value>
+    </property>
+    <property>
+        <name>dfs.datanode.kerberos.principal</name>
+        <value>alice/localhost@KDC.LOCAL</value>
+    </property>
+    <property>
+        <name>dfs.datanode.keytab.file</name>
+        <value>${KDC_MINI_CLUSTER_BASE_DIR}/alice.keytab</value>
+    </property>
+    <property>
+        <name>dfs.web.authentication.kerberos.principal</name>
+        <value>alice/localhost@KDC.LOCAL</value>
+    </property>
+    <property>
+        <name>dfs.web.authentication.kerberos.keytab</name>
+        <value>${KDC_MINI_CLUSTER_BASE_DIR}/alice.keytab</value>
+    </property>
+
+    <property>
+        <name>dfs.block.access.token.enable</name>
+        <value>true</value>
+    </property>
+    <property>
+        <name>dfs.data.transfer.protection</name>
+        <value>authentication</value>
+    </property>
+    <property>
+        <name>dfs.http.policy</name>
+        <value>HTTPS_ONLY</value>
+    </property>
+</configuration>

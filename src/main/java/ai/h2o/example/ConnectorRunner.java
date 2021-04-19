@@ -16,6 +16,7 @@ public class ConnectorRunner {
             String[] commands = {
                     "java",
                     "-Ddai.connectors.log.dir=" + workingDir.resolve("build/logs"),
+                    "-Djava.security.krb5.conf=" + System.getProperty("java.security.krb5.conf"),  // MiniKdc sets this
                     "-cp",
                     "h2oai-dai-connectors.jar:" + parameters.getConfDir(),
                     "ai.h2o.dai.connectors.HiveConnectorCli",
