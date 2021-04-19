@@ -31,5 +31,5 @@ dependencies {
 
 application {
     // Define the main class for the application.
-    mainClassName = 'ai.h2o.example.App'
+    mainClassName = 'ai.h2o.example.ConnectorRunner'
 }

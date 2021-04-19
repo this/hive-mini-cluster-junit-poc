@@ -20,7 +20,7 @@ import java.sql.DriverManager;
 
 import static org.junit.Assert.assertEquals;
 
-public class AppTest {
+public class NoAuthTest {
     private HdfsLocalCluster hdfsLocalCluster;
     private MRLocalCluster mrLocalCluster;
     private ZookeeperLocalCluster zookeeperLocalCluster;
@@ -138,11 +138,11 @@ public class AppTest {
 
     @Test
     public void testHiveConnector() {
-        final App app = new App();
+        final ConnectorRunner connectorRunner = new ConnectorRunner();
         final Parameters parameters = Parameters.builder()
                 .setAuthType("NOAUTH")
                 .setQuery("SELECT count(*) FROM grades")
                 .build();
-        assertEquals("{\"success\":true}", app.runConnector(parameters));
+        assertEquals("{\"success\":true}", connectorRunner.run(parameters));
     }
 }

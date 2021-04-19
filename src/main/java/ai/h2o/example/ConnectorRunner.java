@@ -9,12 +9,8 @@ import java.io.InputStreamReader;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-public class App {
-    public String getGreeting() {
-        return "Hello world.";
-    }
-
-    public String runConnector(Parameters parameters) {
+public class ConnectorRunner {
+    public String run(Parameters parameters) {
         Path workingDir = Paths.get("").toAbsolutePath();
         try {
             String[] commands = {
@@ -57,7 +53,7 @@ public class App {
                 .setAuthType("NOAUTH")
                 .setQuery("show databases")
                 .build();
-        System.out.println(new App().runConnector(parameters));
+        System.out.println(new ConnectorRunner().run(parameters));
         System.out.println("===================================");
     }
 }
