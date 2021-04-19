@@ -55,7 +55,7 @@ public class Parameters {
     }
 
     public static class Builder {
-        private final String user;
+        private String user;
         private String authType;
         private String userPrincipal;
         private String userKeytab;
@@ -65,8 +65,8 @@ public class Parameters {
         private final Path workingDir = Paths.get("").toAbsolutePath();
 
         public Builder() {
-            this.user = System.getenv("USER");
             this.destinationDir = workingDir.resolve("build/results_" + System.currentTimeMillis()).toString();
+            setUser(System.getProperty("user.name"));
             setAuthType("NOAUTH");
             setUserPrincipal("");
             setUserKeytab("");
@@ -75,6 +75,11 @@ public class Parameters {
         public Builder setAuthType(String authType) {
             this.authType = authType.toUpperCase();
             this.setConfDir();
+            return this;
+        }
+
+        public Builder setUser(String user) {
+            this.user = user;
             return this;
         }
 
