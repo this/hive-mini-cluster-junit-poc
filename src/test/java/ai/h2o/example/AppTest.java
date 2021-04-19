@@ -138,7 +138,11 @@ public class AppTest {
 
     @Test
     public void testHiveConnector() {
-        App app = new App();
-        assertEquals("{\"success\":true}", app.runConnector("NOAUTH", "SELECT count(*) FROM grades"));
+        final App app = new App();
+        final Parameters parameters = Parameters.builder()
+                .setAuthType("NOAUTH")
+                .setQuery("SELECT count(*) FROM grades")
+                .build();
+        assertEquals("{\"success\":true}", app.runConnector(parameters));
     }
 }

@@ -14,23 +14,22 @@ public class App {
         return "Hello world.";
     }
 
-    public String runConnector(String authType, String query) {
-        Path workingDir = Paths.get(".").toAbsolutePath();
-        Path confDir = workingDir.resolve("src/test/resources/conf").resolve(authType.toLowerCase());
+    public String runConnector(Parameters parameters) {
+        Path workingDir = Paths.get("").toAbsolutePath();
         try {
             String[] commands = {
                     "java",
                     "-Ddai.connectors.log.dir=" + workingDir.resolve("build/logs"),
                     "-cp",
-                    "h2oai-dai-connectors.jar:" + confDir,
+                    "h2oai-dai-connectors.jar:" + parameters.getConfDir(),
                     "ai.h2o.dai.connectors.HiveConnectorCli",
-                    "--user=sajith",
-                    "--appUser=",
-                    "--keyTabPath=",
-                    "--dst=" + workingDir.resolve("build/results_" + System.currentTimeMillis()),
-                    "--authType=" + authType,
-                    "--query=" + query,
-                    "--coreSiteXmlPath=" + confDir,
+                    "--user=" + parameters.getUser(),
+                    "--appUser=" + parameters.getAppUser(),
+                    "--keyTabPath=" + parameters.getKeyTabPath(),
+                    "--dst=" + parameters.getDestinationDir(),
+                    "--authType=" + parameters.getAuthType(),
+                    "--query=" + parameters.getQuery(),
+                    "--coreSiteXmlPath=" + parameters.getConfDir(),
                     "--command=query"
             };
             Process p = new ProcessBuilder(commands)
@@ -54,7 +53,11 @@ public class App {
 
     public static void main(String[] args) {
         System.out.println("===================================");
-        System.out.println(new App().runConnector("NOAUTH", "select databases"));
+        final Parameters parameters = Parameters.builder()
+                .setAuthType("NOAUTH")
+                .setQuery("show databases")
+                .build();
+        System.out.println(new App().runConnector(parameters));
         System.out.println("===================================");
     }
 }
