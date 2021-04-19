@@ -75,7 +75,7 @@ public class NoAuthTest {
         hiveConf.setVar(HiveConf.ConfVars.HIVE_SERVER2_THRIFT_BIND_HOST, "localhost");
         hiveLocalMetaStore = new HiveLocalMetaStore.Builder()
                 .setHiveMetastoreHostname("localhost")
-                .setHiveMetastorePort(hiveConf.getInt(HiveConf.ConfVars.METASTORE_SERVER_PORT.varname, -1))
+                .setHiveMetastorePort(hiveConf.getIntVar(HiveConf.ConfVars.METASTORE_SERVER_PORT))
                 .setHiveMetastoreDerbyDbDir(hiveMetastoreDerbyDbDir)
                 .setHiveScratchDir(hiveScratchDir)
                 .setHiveWarehouseDir(hiveWarehouseDir)
@@ -83,8 +83,8 @@ public class NoAuthTest {
                 .build();
         hiveLocalMetaStore.start();
         hiveLocalServer2 = new HiveLocalServer2.Builder()
-                .setHiveServer2Hostname(hiveConf.get(HiveConf.ConfVars.HIVE_SERVER2_THRIFT_BIND_HOST.varname))
-                .setHiveServer2Port(hiveConf.getInt(HiveConf.ConfVars.HIVE_SERVER2_THRIFT_PORT.varname, -1))
+                .setHiveServer2Hostname(hiveConf.getVar(HiveConf.ConfVars.HIVE_SERVER2_THRIFT_BIND_HOST))
+                .setHiveServer2Port(hiveConf.getIntVar(HiveConf.ConfVars.HIVE_SERVER2_THRIFT_PORT))
                 .setHiveMetastoreHostname(hiveLocalMetaStore.getHiveMetastoreHostname())
                 .setHiveMetastorePort(hiveLocalMetaStore.getHiveMetastorePort())
                 .setHiveMetastoreDerbyDbDir(hiveMetastoreDerbyDbDir)
