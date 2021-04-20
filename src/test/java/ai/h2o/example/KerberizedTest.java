@@ -61,7 +61,6 @@ public class KerberizedTest {
         final Configuration hdfsConfig = new Configuration();
         // HDFS configurations
         hdfsConfig.setInt("dfs.replication", 1);
-        hdfsConfig.setInt("dfs.namenode.rpc-address", 9000);
         hdfsConfig.setInt("dfs.namenode.http-address", 50070);
         // HDFS configurations - Kerberos
         hdfsConfig.set("hadoop.security.authentication", "kerberos");
@@ -81,7 +80,7 @@ public class KerberizedTest {
         hdfsConfig.set("hadoop.ssl.server.conf", "conf/keytab/ssl-server.xml");
         hdfsConfig.set("dfs.https.server.keystore.resource", hdfsConfig.get("hadoop.ssl.server.conf"));
         hdfsLocalCluster = new HdfsLocalCluster.Builder()
-                .setHdfsNamenodePort(hdfsConfig.getInt("dfs.namenode.rpc-address", -1))
+                .setHdfsNamenodePort(9000)
                 .setHdfsNamenodeHttpPort(hdfsConfig.getInt("dfs.namenode.http-address", -1))
                 .setHdfsTempDir(tmpDir.newFolder("hdfs-mini-cluster").getPath())
                 .setHdfsNumDatanodes(1)

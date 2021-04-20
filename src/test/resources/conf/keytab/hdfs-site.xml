@@ -5,10 +5,6 @@
         <name>dfs.replication</name>
         <value>1</value>
     </property>
-    <property>
-        <name>dfs.namenode.rpc-address</name>
-        <value>9000</value>
-    </property>
 
     <property>
         <name>dfs.namenode.kerberos.principal</name>
