@@ -161,7 +161,8 @@ public class KerberizedTest {
 
         UserGroupInformation.loginUserFromKeytab(USER_PRINCIPAL, USER_KEYTAB);
         Class.forName("org.apache.hive.jdbc.HiveDriver");
-        final String url = String.format("jdbc:hive2://127.0.0.1:%d/default;principal=%s",
+        final String url = String.format("jdbc:hive2://%s:%d/default;principal=%s",
+                hiveLocalServer2.getHiveServer2Hostname(),
                 hiveLocalServer2.getHiveServer2Port(),
                 USER_PRINCIPAL);
         final Connection con = DriverManager.getConnection(url,
