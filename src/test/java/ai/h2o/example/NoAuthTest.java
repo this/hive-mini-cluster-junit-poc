@@ -34,10 +34,9 @@ public class NoAuthTest {
     public void setUp() throws Exception {
         final Configuration hdfsConfig = new Configuration();
         hdfsConfig.setInt("dfs.replication", 1);
-        hdfsConfig.setInt("dfs.namenode.rpc-address", 9000);
         hdfsConfig.setInt("dfs.namenode.http-address", 50070);
         hdfsLocalCluster = new HdfsLocalCluster.Builder()
-                .setHdfsNamenodePort(hdfsConfig.getInt("dfs.namenode.rpc-address", -1))
+                .setHdfsNamenodePort(9000)
                 .setHdfsNamenodeHttpPort(hdfsConfig.getInt("dfs.namenode.http-address", -1))
                 .setHdfsTempDir(tmpDir.newFolder("hdfs-mini-cluster").getPath())
                 .setHdfsNumDatanodes(1)
