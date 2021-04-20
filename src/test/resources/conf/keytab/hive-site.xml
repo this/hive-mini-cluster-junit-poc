@@ -55,13 +55,4 @@
         <value>${KDC_MINI_CLUSTER_BASE_DIR}/alice.keytab</value>
         <description>The path to the Kerberos Keytab file containing the metastore Thrift server's service principal.</description>
     </property>
-
-    <property>
-        <name>hive.server2.enable.doAs</name>
-        <value>false</value>
-        <description>
-            Setting this property to true will have HiveServer2 execute
-            Hive operations as the user making the calls to it.
-        </description>
-    </property>
 </configuration>
